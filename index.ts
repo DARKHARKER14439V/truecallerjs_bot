@@ -48,10 +48,11 @@ Deno.serve(
       // https://github.com/sumithemmadi/truecallerjs/blob/a9259f85d828e0fbe16b6adf6f1142ae6d0d5aa5/src/login.ts#L60C22-L60C43
       if (error.message === "Invalid phone number.") {
         message = error.message;
-      } else if (error.isAxiosError && "response" in error) {
+      } else if (error.isAxiosError) {
+        // AxiosResponse typedef:
         // https://github.com/axios/axios/blob/e7b7253f876a5e55d5cc39ef37d15d6d72ec6a5b/index.d.ts#L396
-        const status: number = error.response.data.status ??
-          error.response.status;
+        const status: number | undefined = error.response.data.status ??
+          error.response.status ?? error.status;
 
         switch (status) {
           case 400:
